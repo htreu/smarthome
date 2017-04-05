@@ -562,8 +562,8 @@ public class ThingResource implements SatisfiableRESTResource {
         if (info == null) {
             return JSONResponse.createErrorResponse(Status.NOT_FOUND, "Firmware status info not found");
         }
-        return Response.ok().entity(new FirmwareStatusDTO("" + info.getFirmwareStatus(),
-                info.getUpdatableFirmwareUID().getFirmwareVersion())).build();
+
+        return Response.ok().entity(buildFirmwareDTO(info)).build();
     }
 
     private FirmwareUpdateHandler getFirmwareUpdateHandler(ThingUID thingUID) {
@@ -572,17 +572,24 @@ public class ThingResource implements SatisfiableRESTResource {
                 return firmwareUpdateHandler;
             }
         }
+
         return null;
     }
 
     private FirmwareStatusDTO getThingFirmwareStatus(ThingUID thingUID) {
-        // TODO Auto-generated method stub
         FirmwareStatusInfo info = firmwareUpdateService.getFirmwareStatusInfo(thingUID);
         if (info != null) {
-            return new FirmwareStatusDTO("" + info.getFirmwareStatus(),
-                    info.getUpdatableFirmwareUID().getFirmwareVersion());
+            return buildFirmwareDTO(info);
         }
+
         return null;
+    }
+
+    private FirmwareStatusDTO buildFirmwareDTO(FirmwareStatusInfo info) {
+        String updatableFirmwareUID = info.getUpdatableFirmwareUID() == null ? ""
+                : info.getUpdatableFirmwareUID().getFirmwareVersion();
+
+        return new FirmwareStatusDTO(info.getFirmwareStatus().name(), updatableFirmwareUID);
     }
 
     /**
