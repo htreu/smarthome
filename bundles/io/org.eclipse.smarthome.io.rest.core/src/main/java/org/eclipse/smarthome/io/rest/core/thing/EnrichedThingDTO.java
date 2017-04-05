@@ -15,7 +15,7 @@ import java.util.Set;
 import org.eclipse.smarthome.core.thing.ThingStatusInfo;
 import org.eclipse.smarthome.core.thing.dto.ChannelDTO;
 import org.eclipse.smarthome.core.thing.dto.ThingDTO;
-import org.eclipse.smarthome.core.thing.firmware.FirmwareStatusDTO;
+import org.eclipse.smarthome.core.thing.firmware.dto.FirmwareStatusDTO;
 
 /**
  * This is a data transfer object that is used to serialize things with dynamic data like the status.

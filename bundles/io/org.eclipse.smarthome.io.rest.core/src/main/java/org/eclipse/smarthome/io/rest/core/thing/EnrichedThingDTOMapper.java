@@ -15,7 +15,7 @@ import java.util.Set;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.dto.ThingDTO;
 import org.eclipse.smarthome.core.thing.dto.ThingDTOMapper;
-import org.eclipse.smarthome.core.thing.firmware.FirmwareStatusDTO;
+import org.eclipse.smarthome.core.thing.firmware.dto.FirmwareStatusDTO;
 
 /**
  * The {@link EnrichedThingDTOMapper} is an utility class to map things into enriched thing data transfer objects

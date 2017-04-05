@@ -39,8 +39,8 @@ import org.eclipse.smarthome.core.thing.dto.ChannelGroupDefinitionDTO;
 import org.eclipse.smarthome.core.thing.dto.StrippedThingTypeDTO;
 import org.eclipse.smarthome.core.thing.dto.StrippedThingTypeDTOMapper;
 import org.eclipse.smarthome.core.thing.dto.ThingTypeDTO;
-import org.eclipse.smarthome.core.thing.firmware.FirmwareDTO;
 import org.eclipse.smarthome.core.thing.firmware.FirmwareRegistry;
+import org.eclipse.smarthome.core.thing.firmware.dto.FirmwareDTO;
 import org.eclipse.smarthome.core.thing.type.BridgeType;
 import org.eclipse.smarthome.core.thing.type.ChannelDefinition;
 import org.eclipse.smarthome.core.thing.type.ChannelGroupDefinition;
@@ -273,10 +273,9 @@ public class ThingTypeResource implements SatisfiableRESTResource {
     }
 
     private List<FirmwareDTO> convertToFirmwareDTO(Collection<Firmware> firmwares) {
-        // TODO Auto-generated method stub
         List<FirmwareDTO> firmwareList = new ArrayList<>();
         for (Firmware firmware : firmwares) {
-            firmwareList.add(new FirmwareDTO(firmware.getUID() + "", firmware.getVendor(), firmware.getModel(),
+            firmwareList.add(new FirmwareDTO(firmware.getUID().toString(), firmware.getVendor(), firmware.getModel(),
                     firmware.getDescription(), firmware.getVersion(), firmware.getPrerequisiteVersion(),
                     firmware.getChangelog()));
         }
