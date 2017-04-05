@@ -612,9 +612,9 @@ public class ThingResource implements SatisfiableRESTResource {
      * @return Response
      */
     private Response getThingResponse(Status status, Thing thing, Locale locale, String errormessage) {
-        Object entity = null != thing ? EnrichedThingDTOMapper.map(thing, uriInfo.getBaseUri(), locale,
-                this.getThingFirmwareStatus(thing.getUID()), getLinkedItemsMap(thing)) : null;
-        return JSONResponse.createResponse(status, entity, errormessage);
+        EnrichedThingDTO enrichedThingDTO = thing != null ? EnrichedThingDTOMapper.map(thing, uriInfo.getBaseUri(),
+                locale, this.getThingFirmwareStatus(thing.getUID()), getLinkedItemsMap(thing)) : null;
+        return JSONResponse.createResponse(status, enrichedThingDTO, errormessage);
     }
 
     protected void setItemChannelLinkRegistry(ItemChannelLinkRegistry itemChannelLinkRegistry) {
