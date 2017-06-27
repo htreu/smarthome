@@ -59,7 +59,6 @@ import tec.uom.se.unit.Units;
 public class YahooWeatherHandler extends ConfigStatusThingHandler {
 
     private static final String LOCATION_PARAM = "location";
-    private static final String TEMPERATURE_UNIT_PARAM = "tempUnit";
 
     private final Logger logger = LoggerFactory.getLogger(YahooWeatherHandler.class);
     public static final Unit<Pressure> INCH_OF_MERCURY = PASCAL.multiply(3386.388);
@@ -78,7 +77,6 @@ public class YahooWeatherHandler extends ConfigStatusThingHandler {
     private long lastUpdateTime;
 
     private BigDecimal location;
-    private String tempUnit;
     private BigDecimal refresh;
 
     private String weatherData = null;
@@ -96,7 +94,6 @@ public class YahooWeatherHandler extends ConfigStatusThingHandler {
         Configuration config = getThing().getConfiguration();
 
         location = (BigDecimal) config.get(LOCATION_PARAM);
-        tempUnit = (String) config.get(TEMPERATURE_UNIT_PARAM);
 
         try {
             refresh = (BigDecimal) config.get("refresh");
@@ -248,9 +245,6 @@ public class YahooWeatherHandler extends ConfigStatusThingHandler {
             String temp = getValue(weatherData, "condition", "temp");
             if (temp != null) {
                 QuantityType temperature = new QuantityType(Double.parseDouble(temp), Units.CELSIUS);
-                if (tempUnit.equalsIgnoreCase("1")) {
-                    temperature = temperature.toUnit(FAHRENHEIT);
-                }
                 return temperature;
             }
         }
