@@ -20,7 +20,6 @@ import org.eclipse.smarthome.binding.yahooweather.internal.connection.YahooWeath
 import org.eclipse.smarthome.config.core.Configuration;
 import org.eclipse.smarthome.config.core.status.ConfigStatusMessage;
 import org.eclipse.smarthome.core.cache.ExpiringCacheMap;
-import org.eclipse.smarthome.core.i18n.UnitProvider;
 import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.QuantityType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
@@ -32,8 +31,11 @@ import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.RefreshType;
 import org.eclipse.smarthome.core.types.State;
 import org.eclipse.smarthome.core.types.UnDefType;
+import org.eclipse.smarthome.core.types.UnitProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import tec.uom.se.unit.Units;
 
 /**
  * The {@link YahooWeatherHandler} is responsible for handling commands, which are
@@ -233,8 +235,7 @@ public class YahooWeatherHandler extends ConfigStatusThingHandler {
         if (weatherData != null) {
             String temp = getValue(weatherData, "condition", "temp");
             if (temp != null) {
-                QuantityType temperature = new QuantityType(Double.parseDouble(temp), UnitProvider.CELSIUS);
-                return temperature;
+                return new QuantityType(Double.parseDouble(temp), Units.CELSIUS);
             }
         }
         return UnDefType.UNDEF;
