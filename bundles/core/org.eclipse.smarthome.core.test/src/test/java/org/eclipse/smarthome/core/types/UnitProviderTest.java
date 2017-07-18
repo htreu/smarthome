@@ -24,6 +24,12 @@ public class UnitProviderTest {
         assertThat(inHg.to(UnitProvider.HECTO_PASCAL),
                 is(Quantities.getQuantity(new BigDecimal("33.86388"), UnitProvider.HECTO_PASCAL)));
     }
+    
+    @Test
+    public void test_inHg_UnitSymbol() {
+        assertThat(UnitProvider.INCH_OF_MERCURY.getSymbol(), is("inHg"));
+        assertThat(UnitProvider.INCH_OF_MERCURY.toString(), is("inHg"));
+    }
 
     @Test
     public void testPascal2inHgConversion() {
@@ -40,6 +46,11 @@ public class UnitProviderTest {
         assertThat(pascal.to(UnitProvider.HECTO_PASCAL),
                 is(Quantities.getQuantity(BigDecimal.ONE, UnitProvider.HECTO_PASCAL)));
     }
+
+    @Test
+    public void test_hPa_UnitSymbol() {
+        assertThat(UnitProvider.HECTO_PASCAL.toString(), is("hPa"));
+    }
     
     @Test
     public void testKelvin2Fahrenheit() {
@@ -47,12 +58,25 @@ public class UnitProviderTest {
         
         assertThat(kelvin.to(UnitProvider.FAHRENHEIT), is(Quantities.getQuantity(new BigDecimal("-459.67"), UnitProvider.FAHRENHEIT)));
     }
+
+    @Test
+    public void testKelvin2Fahrenheit2() {
+        Quantity<Temperature> kelvin = Quantities.getQuantity(new BigDecimal(300), UnitProvider.KELVIN);
+        
+        assertThat(kelvin.to(UnitProvider.FAHRENHEIT), is(Quantities.getQuantity(new BigDecimal("80.33"), UnitProvider.FAHRENHEIT)));
+    }
     
     @Test
     public void testFahrenheit2Kelvin() {
-        Quantity<Temperature> fahrenheit = Quantities.getQuantity(new BigDecimal("100"), UnitProvider.FAHRENHEIT);
+        Quantity<Temperature> fahrenheit = Quantities.getQuantity(new BigDecimal(100), UnitProvider.FAHRENHEIT);
         
-        assertThat(fahrenheit.to(UnitProvider.KELVIN), is(Quantities.getQuantity(new BigDecimal("310.9277778"), UnitProvider.KELVIN)));
+        assertThat(fahrenheit.to(UnitProvider.KELVIN), is(Quantities.getQuantity(new BigDecimal("310.9277777777777777777777777777778"), UnitProvider.KELVIN)));
+    }
+
+    @Test
+    public void test_fahrenheit_UnitSymbol() {
+        assertThat(UnitProvider.FAHRENHEIT.getSymbol(), is("°F"));
+        assertThat(UnitProvider.FAHRENHEIT.toString(), is("°F"));
     }
 
 }

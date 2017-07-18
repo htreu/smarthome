@@ -217,15 +217,13 @@ public class YahooWeatherHandler extends ConfigStatusThingHandler {
             String pressure = getValue(weatherData, "atmosphere", "pressure");
             if (pressure != null) {
                 double pressDouble = Double.parseDouble(pressure);
-
-                if (pressDouble > 10000.0) {
-                    // Unreasonably high, record so far was 1085,8 hPa
-                    // The Yahoo API currently returns inHg values although it claims they are mbar - therefore convert
-                    ret = new QuantityType(pressDouble, UnitProvider.INCH_OF_MERCURY);
-                } else {
-                    ret = new QuantityType(pressDouble, UnitProvider.HECTO_PASCAL);
-                }
-
+                // The Yahoo! waether API delivers wrong pressure values. Instead of the requested mbar
+                // it responds with mbar * 33.86 which is somehow inHg*1000.
+                // This is documented in several issues:
+                // https://github.com/pvizeli/yahooweather/issues/2
+                // https://github.com/monkeecreate/jquery.simpleWeather/issues/227
+                // So we provide a "special" unit here:
+                ret = new QuantityType(pressDouble, UnitProvider.HECTO_PASCAL.divide(33.86));
             }
         }
         return ret;

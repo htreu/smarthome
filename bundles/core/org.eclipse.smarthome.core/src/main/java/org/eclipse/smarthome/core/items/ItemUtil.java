@@ -9,6 +9,7 @@ package org.eclipse.smarthome.core.items;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.smarthome.core.library.items.NumberItem;
+import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.QuantityType;
 import org.eclipse.smarthome.core.types.Dimension;
 import org.eclipse.smarthome.core.types.State;
@@ -99,8 +100,11 @@ public class ItemUtil {
         if (item instanceof NumberItem && state instanceof QuantityType) {
             Dimension dimension = ((NumberItem) item).getDimension();
             QuantityType quantityState = (QuantityType) state;
-            if (dimension != null && dimension.getDefaultUnit().isCompatible(quantityState.getUnit())) {
+            if (dimension != Dimension.DIMENSIONLESS
+                    && dimension.getDefaultUnit().isCompatible(quantityState.getUnit())) {
                 return quantityState.toUnit(dimension.getLocaleUnit());
+            } else {
+                return quantityState.as(DecimalType.class);
             }
         }
 

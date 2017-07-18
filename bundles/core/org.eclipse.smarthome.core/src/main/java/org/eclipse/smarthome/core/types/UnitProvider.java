@@ -15,6 +15,7 @@ import javax.measure.Unit;
 import javax.measure.quantity.Pressure;
 import javax.measure.quantity.Temperature;
 
+import tec.uom.se.format.SimpleUnitFormat;
 import tec.uom.se.function.AddConverter;
 import tec.uom.se.function.RationalConverter;
 import tec.uom.se.unit.TransformedUnit;
@@ -33,6 +34,11 @@ public class UnitProvider extends Units {
     public static final Unit<Pressure> HECTO_PASCAL = HECTO(PASCAL);
 
     public static final Unit<Temperature> FAHRENHEIT = new TransformedUnit<>("°F", KELVIN,
-            new RationalConverter(BigInteger.valueOf(9), BigInteger.valueOf(5)).concatenate(new AddConverter(459.67)));
+            new RationalConverter(BigInteger.valueOf(5), BigInteger.valueOf(9)).concatenate(new AddConverter(459.67)));
+
+    static {
+        SimpleUnitFormat.getInstance().label(INCH_OF_MERCURY, "inHg");
+        SimpleUnitFormat.getInstance().label(FAHRENHEIT, "°F");
+    }
 
 }

@@ -96,7 +96,12 @@ angular.module('PaperUI.controllers', [ 'PaperUI.constants' ]).controller('BodyC
                     }
                 }
                 if (item.type === "Number" || item.groupType === "Number") {
-                    var parsedValue = Number(state);
+                    var parsedValue
+                    if (stateObject.type === 'Quantity') {
+                        parsedValue = Number(state.split(' ')[0])
+                    } else {
+                        parsedValue = Number(state);
+                    }
                     if (isNaN(parsedValue)) {
                         state = null;
                     } else {
