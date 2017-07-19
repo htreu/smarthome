@@ -28,10 +28,10 @@ import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.ThingStatusDetail;
 import org.eclipse.smarthome.core.thing.binding.ConfigStatusThingHandler;
 import org.eclipse.smarthome.core.types.Command;
+import org.eclipse.smarthome.core.types.ESHUnits;
 import org.eclipse.smarthome.core.types.RefreshType;
 import org.eclipse.smarthome.core.types.State;
 import org.eclipse.smarthome.core.types.UnDefType;
-import org.eclipse.smarthome.core.types.UnitProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -217,13 +217,17 @@ public class YahooWeatherHandler extends ConfigStatusThingHandler {
             String pressure = getValue(weatherData, "atmosphere", "pressure");
             if (pressure != null) {
                 double pressDouble = Double.parseDouble(pressure);
-                // The Yahoo! waether API delivers wrong pressure values. Instead of the requested mbar
-                // it responds with mbar * 33.86 which is somehow inHg*1000.
-                // This is documented in several issues:
-                // https://github.com/pvizeli/yahooweather/issues/2
-                // https://github.com/monkeecreate/jquery.simpleWeather/issues/227
-                // So we provide a "special" unit here:
-                ret = new QuantityType(pressDouble, UnitProvider.HECTO_PASCAL.divide(33.86));
+                if (pressDouble > 10000) {
+                    // The Yahoo! waether API delivers wrong pressure values. Instead of the requested mbar
+                    // it responds with mbar * 33.86 which is somehow inHg*1000.
+                    // This is documented in several issues:
+                    // https://github.com/pvizeli/yahooweather/issues/2
+                    // https://github.com/monkeecreate/jquery.simpleWeather/issues/227
+                    // So we provide a "special" unit here:
+                    ret = new QuantityType(pressDouble / 33.86d, ESHUnits.HECTO_PASCAL);
+                } else {
+                    ret = new QuantityType(pressDouble, ESHUnits.HECTO_PASCAL);
+                }
             }
         }
         return ret;

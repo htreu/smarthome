@@ -31,13 +31,11 @@
 
 	<channel-type id="temperature">
 		<item-type>Number</item-type>
-		<dimension>
-			Temperature</dimension>
+		<dimension>Temperature</dimension>
 		<label>Temperature</label>
 		<description>Current temperature</description>
 		<category>Temperature</category>
-		<state readOnly="true" pattern="%.1f °C">
-		</state>
+		<state readOnly="true" />
 	</channel-type>
 
 	<channel-type id="humidity">
@@ -45,8 +43,7 @@
 		<label>Humidity</label>
 		<description>Current humidity in %</description>
 		<category>Humidity</category>
-		<state readOnly="true" pattern="%d %%">
-		</state>
+		<state readOnly="true" pattern="%d %%" />
 	</channel-type>
 
 	<channel-type id="pressure">
@@ -55,8 +52,7 @@
 		<label>Pressure</label>
 		<description>Current pressure</description>
 		<category>Pressure</category>
-		<state readOnly="true" pattern="%.1f hPa">
-		</state>
+		<state readOnly="true" pattern="%.1f"/>
 	</channel-type>
 
 </thing:thing-descriptions>

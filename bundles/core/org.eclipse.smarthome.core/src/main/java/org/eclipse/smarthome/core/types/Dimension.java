@@ -7,13 +7,9 @@
  */
 package org.eclipse.smarthome.core.types;
 
-import java.util.List;
-
 import javax.measure.Unit;
 
 import org.apache.commons.lang.StringUtils;
-
-import com.google.common.collect.Lists;
 
 import tec.uom.se.unit.Units;
 
@@ -47,30 +43,24 @@ public enum Dimension {
     // MAGNETIC_FLUX_DENSITY,
     // MASS,
     // POWER,
-    PRESSURE(Units.PASCAL, UnitProvider.HECTO_PASCAL, UnitProvider.INCH_OF_MERCURY),
+    PRESSURE(Units.PASCAL),
     // RADIATION_DOSE_ABSORBED,
     // RADIATION_DOSE_EFFECTIVE,
     // RADIO_ACTVITY,
     // SOLID_ANGLE,
     // SPEED,
-    TEMPERATURE(Units.KELVIN, Units.CELSIUS, UnitProvider.FAHRENHEIT);
+    TEMPERATURE(Units.KELVIN);
     // TIME,
     // VOLUME;
 
     private final Unit<?> defaultUnit;
-    private final List<Unit<?>> units;
 
-    private Dimension(Unit<?> defaultUnit, Unit<?>... units) {
+    private Dimension(Unit<?> defaultUnit) {
         this.defaultUnit = defaultUnit;
-        this.units = Lists.asList(defaultUnit, units);
     }
 
     public Unit<?> getDefaultUnit() {
         return defaultUnit;
-    }
-
-    public Unit<?> getLocaleUnit() {
-        return units.get(1);
     }
 
     /**
