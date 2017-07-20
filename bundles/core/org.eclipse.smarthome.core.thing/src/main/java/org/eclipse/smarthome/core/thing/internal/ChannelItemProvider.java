@@ -26,6 +26,7 @@ import org.eclipse.smarthome.core.items.Item;
 import org.eclipse.smarthome.core.items.ItemFactory;
 import org.eclipse.smarthome.core.items.ItemProvider;
 import org.eclipse.smarthome.core.items.ItemRegistry;
+import org.eclipse.smarthome.core.library.items.NumberItem;
 import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
@@ -225,13 +226,14 @@ public class ChannelItemProvider implements ItemProvider {
                     }
                 }
             }
-            if (item != null) {
-                if (item instanceof GenericItem) {
-                    GenericItem gItem = (GenericItem) item;
-                    gItem.setLabel(getLabel(channel));
-                    gItem.setCategory(getCategory(channel));
-                    gItem.addTags(channel.getDefaultTags());
-                }
+            if (item instanceof GenericItem) {
+                GenericItem gItem = (GenericItem) item;
+                gItem.setLabel(getLabel(channel));
+                gItem.setCategory(getCategory(channel));
+                gItem.addTags(channel.getDefaultTags());
+            }
+            if (item instanceof NumberItem && getChannelType(channel).getDimension() != null) {
+                ((NumberItem) item).setDimension(getChannelType(channel).getDimension());
             }
             if (item != null) {
                 items.put(item.getName(), item);
@@ -240,6 +242,10 @@ public class ChannelItemProvider implements ItemProvider {
                 }
             }
         }
+    }
+
+    private ChannelType getChannelType(Channel channel) {
+        return null;
     }
 
     private String getCategory(Channel channel) {
