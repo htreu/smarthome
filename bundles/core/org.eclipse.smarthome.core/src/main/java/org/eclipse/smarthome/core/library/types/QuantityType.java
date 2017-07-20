@@ -73,7 +73,7 @@ public class QuantityType extends Number implements PrimitiveType, State, Comman
 
     @Override
     public String toString() {
-        return toFullString();
+        return quantity.toString();
     }
 
     public static QuantityType valueOf(String value) {
@@ -203,7 +203,7 @@ public class QuantityType extends Number implements PrimitiveType, State, Comman
 
     @Override
     public String toFullString() {
-        return quantity.toString();
+        return toBigDecimal().toPlainString();
     }
 
     @Override
