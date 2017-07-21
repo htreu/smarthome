@@ -1,4 +1,13 @@
-Number:TEMPERATURE Weather_Temperature "Outside Temperature (typed)" <temperature> (Weather_Chart) { channel="yahooweather:weather:berlin:temperature" }
-Number Weather_Temperature2 "Outside Temperature [%.1f °C]" <temperature> (Weather_Chart) { channel="yahooweather:weather:berlin:temperature" }
-Number:PRESSURE Weather_Pressure "Pressure (typed)"  { channel="yahooweather:weather:berlin:pressure" }
-Number Weather_Pressure2 "Pressure [%.1f hPa]"  { channel="yahooweather:weather:berlin:pressure" }
+Group:Switch:OR(ON,OFF) DemoSwitchGroup [ "home-group" ]
+
+Switch DemoSwitch (DemoSwitchGroup)
+Dimmer DemoDimmer (DemoSwitchGroup)
+Rollershutter DemoRollershutter
+Color DemoColor (DemoSwitchGroup)
+DateTime DemoDateTime
+Location DemoLocation
+String DemoString
+Contact DemoContact
+
+Number:TEMPERATURE Weather_Temperature "Outside Temperature" <temperature> (Weather_Chart) { channel="yahooweather:weather:berlin:temperature" }
+Number:PRESSURE Weather_Pressure "Pressure [%.2f %unit%]"  { channel="yahooweather:weather:berlin:pressure" }
