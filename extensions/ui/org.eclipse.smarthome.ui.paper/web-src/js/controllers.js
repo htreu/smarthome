@@ -96,17 +96,13 @@ angular.module('PaperUI.controllers', [ 'PaperUI.constants' ]).controller('BodyC
                     }
                 }
                 if (item.type === "Number" || item.groupType === "Number") {
-                    var parsedValue
-                    if (stateObject.type === 'Quantity') {
-                        parsedValue = Number(state.split(' ')[0])
-                    } else {
-                        parsedValue = Number(state);
-                    }
+                    var parsedValue = Number(state);
                     if (isNaN(parsedValue)) {
                         state = null;
                     } else {
                         state = parsedValue;
                     }
+                    item.unit = stateObject.stateMap['unit']
                 }
                 if (item.type === "Rollershutter") {
                     if (stateObject.type == "Percent" || stateObject.type == "Decimal") {
