@@ -14,29 +14,23 @@ package org.eclipse.smarthome.ui.internal.items;
 
 import org.eclipse.smarthome.core.items.Item;
 import org.eclipse.smarthome.core.items.ItemRegistry;
-import org.eclipse.smarthome.model.core.ModelRepository;
-import org.eclipse.smarthome.model.items.ItemModel;
-import org.eclipse.smarthome.model.items.ModelItem;
 import org.eclipse.smarthome.model.sitemap.Widget;
 import org.eclipse.smarthome.ui.items.ItemUIProvider;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
 /**
  *
  * @author Kai Kreuzer - Initial contribution
  */
+@Component
 public class GenericItemUIProvider implements ItemUIProvider {
 
-    private ModelRepository modelRepository = null;
     private ItemRegistry itemRegistry = null;
 
-    public void setModelRepository(ModelRepository modelRepository) {
-        this.modelRepository = modelRepository;
-    }
-
-    public void unsetModelRepository(ModelRepository modelRepository) {
-        this.modelRepository = null;
-    }
-
+    @Reference(cardinality = ReferenceCardinality.OPTIONAL, policy = ReferencePolicy.DYNAMIC)
     public void setItemRegistry(ItemRegistry itemRegistry) {
         this.itemRegistry = itemRegistry;
     }
@@ -47,8 +41,11 @@ public class GenericItemUIProvider implements ItemUIProvider {
 
     @Override
     public String getCategory(String itemName) {
-        ModelItem item = getItem(itemName);
-        return item != null ? item.getIcon() : null;
+        if (itemRegistry != null) {
+            Item item = itemRegistry.get(itemName);
+            return item != null ? item.getCategory() : null;
+        }
+        return null;
     }
 
     @Override
@@ -67,22 +64,6 @@ public class GenericItemUIProvider implements ItemUIProvider {
 
     @Override
     public Widget getDefaultWidget(Class<? extends org.eclipse.smarthome.core.items.Item> itemType, String itemName) {
-        return null;
-    }
-
-    public ModelItem getItem(String itemName) {
-        if (itemName != null && modelRepository != null) {
-            for (String modelName : modelRepository.getAllModelNamesOfType("items")) {
-                ItemModel model = (ItemModel) modelRepository.getModel(modelName);
-                if (model != null) {
-                    for (ModelItem item : model.getItems()) {
-                        if (itemName.equals(item.getName())) {
-                            return item;
-                        }
-                    }
-                }
-            }
-        }
         return null;
     }
 

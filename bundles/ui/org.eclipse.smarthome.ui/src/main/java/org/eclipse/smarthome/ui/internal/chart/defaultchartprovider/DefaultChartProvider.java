@@ -48,6 +48,11 @@ import org.knowm.xchart.ChartBuilder;
 import org.knowm.xchart.Series;
 import org.knowm.xchart.SeriesMarker;
 import org.knowm.xchart.StyleManager.LegendPosition;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,6 +65,7 @@ import org.slf4j.LoggerFactory;
  * @author Holger Reichert - Support for themes, DPI, legend hiding
  *
  */
+@Component(immediate = true)
 public class DefaultChartProvider implements ChartProvider {
 
     private final Logger logger = LoggerFactory.getLogger(DefaultChartProvider.class);
@@ -76,6 +82,7 @@ public class DefaultChartProvider implements ChartProvider {
 
     public static final int DPI_DEFAULT = 96;
 
+    @Reference(cardinality = ReferenceCardinality.MANDATORY, policy = ReferencePolicy.DYNAMIC)
     public void setItemUIRegistry(ItemUIRegistry itemUIRegistry) {
         this.itemUIRegistry = itemUIRegistry;
     }
@@ -84,6 +91,7 @@ public class DefaultChartProvider implements ChartProvider {
         this.itemUIRegistry = null;
     }
 
+    @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
     public void addPersistenceService(PersistenceService service) {
         if (service instanceof QueryablePersistenceService) {
             persistenceServices.put(service.getId(), (QueryablePersistenceService) service);
@@ -98,18 +106,13 @@ public class DefaultChartProvider implements ChartProvider {
         return persistenceServices;
     }
 
+    @Activate
     protected void activate() {
         logger.debug("Starting up default chart provider.");
         String themeNames = Arrays.stream(CHART_THEMES_AVAILABLE) //
                 .map(t -> t.getThemeName()) //
                 .collect(Collectors.joining(", "));
         logger.debug("Available themes for default chart provider: {}", themeNames);
-    }
-
-    protected void deactivate() {
-    }
-
-    public void destroy() {
     }
 
     @Override
