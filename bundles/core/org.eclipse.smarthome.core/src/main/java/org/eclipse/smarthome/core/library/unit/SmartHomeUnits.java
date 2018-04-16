@@ -12,6 +12,10 @@
  */
 package org.eclipse.smarthome.core.library.unit;
 
+import java.util.Set;
+
+import javax.measure.Dimension;
+import javax.measure.Quantity;
 import javax.measure.Unit;
 import javax.measure.quantity.Acceleration;
 import javax.measure.quantity.AmountOfSubstance;
@@ -158,4 +162,26 @@ public class SmartHomeUnits extends AbstractSystemOfUnits {
         INSTANCE.units.add(unit);
         return unit;
     }
+
+    // Avoid subclasses to require importing the tec.uom.se package
+    @Override
+    @NonNullByDefault({})
+    public Set<Unit<?>> getUnits() {
+        return super.getUnits();
+    }
+
+    // Avoid subclasses to require importing the tec.uom.se package
+    @Override
+    @NonNullByDefault({})
+    public Set<? extends Unit<?>> getUnits(Dimension dimension) {
+        return super.getUnits(dimension);
+    }
+
+    // Avoid subclasses to require importing the tec.uom.se package
+    @Override
+    @NonNullByDefault({})
+    public <Q extends Quantity<Q>> Unit<Q> getUnit(Class<Q> quantityType) {
+        return super.getUnit(quantityType);
+    }
+
 }
