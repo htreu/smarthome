@@ -17,7 +17,6 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,7 +37,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
 
 /**
  * The {@link ItemRegistryOSGiTest} runs inside an OSGi container and tests the {@link ItemRegistry}.
@@ -62,11 +60,8 @@ public class ItemRegistryOSGiTest extends JavaOSGiTest {
     private ItemRegistry itemRegistry;
     private ManagedItemProvider itemProvider;
 
-    private @Mock EventSubscriber eventSubscriber;
-
     @Before
     public void setUp() {
-        initMocks(this);
         registerVolatileStorageService();
 
         itemRegistry = getService(ItemRegistry.class);
@@ -87,7 +82,6 @@ public class ItemRegistryOSGiTest extends JavaOSGiTest {
 
     @After
     public void tearDown() {
-        unregisterService(eventSubscriber);
         unregisterService(itemProvider);
     }
 
@@ -276,6 +270,7 @@ public class ItemRegistryOSGiTest extends JavaOSGiTest {
 
     @Test
     public void testItemAddedEvent() {
+        EventSubscriber eventSubscriber = mock(EventSubscriber.class);
         when(eventSubscriber.getSubscribedEventTypes()).thenReturn(Stream.of(ItemAddedEvent.TYPE).collect(toSet()));
         registerService(eventSubscriber);
 
@@ -283,12 +278,14 @@ public class ItemRegistryOSGiTest extends JavaOSGiTest {
         itemRegistry.add(item);
 
         waitForAssert(() -> verify(eventSubscriber).receive(isA(ItemAddedEvent.class)));
+        unregisterService(eventSubscriber);
     }
 
     @Test
     public void testItemUpdatedEvent() {
         itemRegistry.add(new SwitchItem("SomeSwitch"));
 
+        EventSubscriber eventSubscriber = mock(EventSubscriber.class);
         when(eventSubscriber.getSubscribedEventTypes()).thenReturn(Stream.of(ItemUpdatedEvent.TYPE).collect(toSet()));
         registerService(eventSubscriber);
 
@@ -299,6 +296,7 @@ public class ItemRegistryOSGiTest extends JavaOSGiTest {
         ArgumentCaptor<ItemUpdatedEvent> captor = ArgumentCaptor.forClass(ItemUpdatedEvent.class);
         waitForAssert(() -> verify(eventSubscriber).receive(captor.capture()));
         assertTrue(captor.getValue().getItem().tags.contains(OTHER_TAG));
+        unregisterService(eventSubscriber);
     }
 
     @Test
@@ -307,6 +305,7 @@ public class ItemRegistryOSGiTest extends JavaOSGiTest {
         item.addTag(OTHER_TAG);
         itemRegistry.add(item);
 
+        EventSubscriber eventSubscriber = mock(EventSubscriber.class);
         when(eventSubscriber.getSubscribedEventTypes()).thenReturn(Stream.of(ItemRemovedEvent.TYPE).collect(toSet()));
         registerService(eventSubscriber);
 
@@ -315,6 +314,7 @@ public class ItemRegistryOSGiTest extends JavaOSGiTest {
         ArgumentCaptor<ItemRemovedEvent> captor = ArgumentCaptor.forClass(ItemRemovedEvent.class);
         waitForAssert(() -> verify(eventSubscriber).receive(captor.capture()));
         assertTrue(captor.getValue().getItem().tags.contains(OTHER_TAG));
+        unregisterService(eventSubscriber);
     }
 
     @Test
