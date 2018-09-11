@@ -47,7 +47,7 @@ import org.osgi.framework.ServiceRegistration;
 @NonNullByDefault
 public class JavaOSGiTest extends JavaTest {
 
-    private final Map<String, List<ServiceRegistration<?>>> registeredServices = new HashMap<>();
+    private final Map<String, @Nullable List<ServiceRegistration<?>>> registeredServices = new HashMap<>();
     protected @NonNullByDefault({}) BundleContext bundleContext;
 
     @Before
@@ -306,7 +306,11 @@ public class JavaOSGiTest extends JavaTest {
 
     @After
     public void unregisterMocks() {
-        registeredServices.forEach((interfaceName, services) -> services.forEach(service -> service.unregister()));
+        registeredServices.forEach((interfaceName, services) -> {
+            if (services != null) {
+                services.forEach(service -> service.unregister());
+            }
+        });
         registeredServices.clear();
     }
 

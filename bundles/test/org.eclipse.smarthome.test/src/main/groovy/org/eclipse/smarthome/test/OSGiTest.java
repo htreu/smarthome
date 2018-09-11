@@ -418,7 +418,7 @@ public abstract class OSGiTest {
 
         Dictionary<String, Object> properties = config.getProperties();
         if (properties == null) {
-            properties = new Hashtable();
+            properties = new Hashtable<>();
         }
 
         properties.put("language", locale.getLanguage());
@@ -427,12 +427,16 @@ public abstract class OSGiTest {
         properties.put("variant", locale.getVariant());
 
         config.update(properties);
-        Closure closure = new Closure(null) {
-            public Object doCall() {
+
+        @SuppressWarnings("serial")
+        Closure<Void> closure = new Closure<Void>(null) {
+            @SuppressWarnings("unused")
+            public Void doCall() {
                 assertThat(localeProvider.getLocale(), is(locale));
                 return null;
             }
         };
+
         waitForAssert(closure);
     }
 }
